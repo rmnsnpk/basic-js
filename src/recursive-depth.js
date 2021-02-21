@@ -1,8 +1,14 @@
 const CustomError = require("../extensions/custom-error");
 
 module.exports = class DepthCalculator {
-  calculateDepth(obj) {
-      if (Array.isArray(obj)) return 1 + Math.max(...obj.map(t => getArrayDepth(t)))
-      else return 0;
+  calculateDepth(arr, count = 1, res = []) {
+    res.push(count);
+    for (let i = 0; i < arr.length; i += 1) {
+      if (arr[i] instanceof Array) {
+        this.calculateDepth(arr[i], count + 1, res);
+      }
+    }
+
+    return res.sort((a, b) => b - a).pop();
   }
-  }
+};
